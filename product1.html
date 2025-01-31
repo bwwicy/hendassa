@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product 1 | Product Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="tabthing.png" type="image/png">
+    <style>
+        /* Product Page Styles */
+        .product-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .product-title {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .product-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-images {
+            display: flex;
+            flex-direction: column;
+            width: 45%;
+        }
+
+        .product-image {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .product-summary {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background-color: #ff7b00;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #e56a00;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <img src="logo.png" alt="Product Store Logo" class="logo">
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Product Page -->
+    <div class="product-container">
+        <h1 class="product-title">Product 1</h1>
+        
+        <div class="product-details">
+            <div class="product-images">
+                <img src="product1front.jpg" alt="Product 1 Front" class="product-image">
+                <img src="product1back.jpg" alt="Product 1 Back" class="product-image">
+            </div>
+
+            <div class="product-info">
+                <p class="product-summary">This is a great product for daily use. Made with the best materials, it offers comfort and durability for everyday activities.</p>
+                <p class="price">$29.99</p>
+                <a href="javascript:void(0);" class="btn" onclick="addToCart('Product 1', 29.99)">Buy Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 Product Store. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function addToCart(productName, productPrice) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || []; // Get the existing cart from localStorage
+            cart.push({ name: productName, price: productPrice }); // Add the selected item
+            localStorage.setItem('cart', JSON.stringify(cart)); // Save the updated cart back to localStorage
+            
+            window.location.href = 'cart.html'; // Redirect to the cart page
+        }
+    </script>
+
+</body>
+</html>

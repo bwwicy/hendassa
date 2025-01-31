@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Product Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Checkout Page Styles */
+        .checkout-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .checkout-summary {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .checkout-summary h3 {
+            margin-top: 0;
+        }
+
+        .checkout-summary .item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+        }
+
+        .total-price {
+            text-align: right;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        /* PayPal Button Container */
+        .paypal-button-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Checkout Page Content -->
+    <div class="checkout-container">
+        <h2>Checkout</h2>
+
+        <!-- Cart Summary Section -->
+        <div class="checkout-summary">
+            <h3>Order Summary</h3>
+            <div id="cart-items"></div>
+            <div class="total-price">
+                Total: $<span id="total-price">0.00</span>
+            </div>
+        </div>
+
+        <!-- PayPal Button Container -->
+        <div class="paypal-button-container" id="paypal-button-container">
+            <!-- PayPal Button will be dynamically inserted here -->
+        </div>
+
+        <p id="result-message"></p>
+    </div>
+
+    <!-- PayPal SDK Script -->
+    <script
+        src="https://www.paypal.com/sdk/js?client-id=AY5klmyleEEZRMjzEmc7mGQchHjUvf53yJkqJRAbtXPAyvQsVUoToHfNxHcrS7OXTea1Oojn-9joREcS&buyer-country=US&currency=USD&components=buttons&enable-funding=venmo,paylater,card"
+        data-sdk-integration-source="developer-studio"
+    ></script>
+
+    <script>
+        // Load cart data from localStorage
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartItemsContainer = document.getElementById('cart-items');
+        let totalPrice = 0;
+
+        // Display cart items in the summary
+        cart.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.classList.add('item');
+            itemElement.innerHTML = `
+                <span>${item.name}</span>
+                <span>$${item.price.toFixed(2)}</span>
+            `;
+            cartItemsContainer.appendChild(itemElement);
+            totalPrice += item.price;
+        });
+
+        // Display the total price
+        document.getElementById('total-price').textContent = totalPrice.toFixed(2);
+
+        // PayPal Button Setup
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: totalPrice.toFixed(2)  // Use the total price
+                        }
+                    }]
+                });
+            },
+            onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    document.getElementById('result-message').textContent = 'Payment successful! Thank you for your purchase, ' + details.payer.name.given_name;
+                    // Optionally, you can clear the cart or perform additional actions
+                    localStorage.removeItem('cart');
+                    window.location.href = 'thankyou.html';  // Redirect to a thank you page
+                });
+            },
+            onError: function(err) {
+                document.getElementById('result-message').textContent = 'An error occurred during payment. Please try again.';
+            }
+        }).render('#paypal-button-container'); // Render the PayPal button
+    </script>
+
+</body>
+</html>
